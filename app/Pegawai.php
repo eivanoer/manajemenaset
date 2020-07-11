@@ -4,12 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Golongan extends Model
+class Pegawai extends Model
 {
-	protected $table = 'golongans';
     protected $fillable = [
-        'kode',  'nama', 
+        'name', 'email', 'password', 'api_token',
     ];
     protected $hidden = [];
 }
-//

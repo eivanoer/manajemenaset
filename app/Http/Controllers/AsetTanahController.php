@@ -2,35 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Kondisi;
+use App\AsetTanah;
 use Illuminate\Http\Request;
 
-class KondisiController extends Controller
+class AsetTanahController extends Controller
 {
 
     public function showAllAnggota(){
-        return response()->json(Kondisi::all());
+        return response()->json(AsetTanah::all());
     }
 
     public function showOneAnggota($kode){
-        return response()->json(Kondisi::find($kode));
+        return response()->json(AsetTanah::find($nik));
     }
 
     public function create(Request $request){
         
-        $author = Kondisi::create($request->all());
+        $author = AsetTanah::create($request->all());
         return response()->json($author, 201);
     }
 
     public function update($id, Request $request){
-        $author = Kondisi::findOrFail($id);
+        $author = AsetTanah::findOrFail($id);
         $author->update($request->all());
 
         return response()->json($author, 200);
     }
 
     public function delete($id){
-        Kondisi::findOrFail($id)->delete();
+        AsetTanah::findOrFail($id)->delete();
         return response('Berhasil Dihapus', 200);
     }
 }

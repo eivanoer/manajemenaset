@@ -2,35 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Kondisi;
+use App\Lokasi;
 use Illuminate\Http\Request;
 
-class KondisiController extends Controller
+class LokasiController extends Controller
 {
 
     public function showAllAnggota(){
-        return response()->json(Kondisi::all());
+        return response()->json(Lokasi::all());
     }
 
     public function showOneAnggota($kode){
-        return response()->json(Kondisi::find($kode));
+        return response()->json(Lokasi::find($kode));
     }
 
     public function create(Request $request){
         
-        $author = Kondisi::create($request->all());
+        $author = Lokasi::create($request->all());
         return response()->json($author, 201);
     }
 
     public function update($id, Request $request){
-        $author = Kondisi::findOrFail($id);
+        $author = Lokasi::findOrFail($id);
         $author->update($request->all());
 
         return response()->json($author, 200);
     }
 
     public function delete($id){
-        Kondisi::findOrFail($id)->delete();
+        Lokasi::findOrFail($id)->delete();
         return response('Berhasil Dihapus', 200);
     }
 }

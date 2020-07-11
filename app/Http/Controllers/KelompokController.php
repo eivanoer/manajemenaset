@@ -13,7 +13,7 @@ class KelompokController extends Controller
     }
 
     public function showOneAnggota($kode){
-        return response()->json(Kelompok::find($nik));
+        return response()->json(Kelompok::find($kode));
     }
 
     public function create(Request $request){

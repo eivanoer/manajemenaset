@@ -13,7 +13,7 @@ class GolonganController extends Controller
     }
 
     public function showOneAnggota($kode){
-        return response()->json(Golongan::find($nik));
+        return response()->json(Golongan::find($kode));
     }
 
     public function create(Request $request){

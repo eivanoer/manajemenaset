@@ -4,11 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Golongan extends Model
+class Lokasi extends Model
 {
-	protected $table = 'golongans';
     protected $fillable = [
-        'kode',  'nama', 
+        'nama', 'alamat', 'longitude', 'latitude', 
     ];
     protected $hidden = [];
 }

@@ -3,69 +3,61 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Suport\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\User;
+
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        //var_dump($name);exit;
-        $register = User::create([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password
+        //validate incoming request 
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
         ]);
 
-        if ($register) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Register berhasil!',
-                'data' => $register
+        try {
 
-            ], 201);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Register gagal!',
-                'data' => ''
+            $user = new User;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $plainPassword = $request->input('password');
+            $user->password = app('hash')->make($plainPassword);
 
-            ], 400);
+            $user->save();
+
+            //return successful response
+            return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
+
+        } catch (\Exception $e) {
+            //return error message
+            return response()->json(['message' => 'User Registration Failed!'], 409);
         }
+
     }
 
     public function login(Request $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
+          //validate incoming request 
+        $this->validate($request, [
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-        $user = User::where('email', $email)->first();
-        //var_dump($user); exit;
+        $credentials = $request->only(['email', 'password']);
 
-        if($password == $user->password) {
-            $apiToken = base64_encode($user);
-
-            $user->update([
-                'api_token' => $apiToken
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Berhasil!',
-                'data' => [
-                    'user' => $user,
-                    'api_token' => $apiToken
-                ]
-            ], 201);
-        } else {
-             return response()->json([
-                'success' => false,
-                'message' => 'Login Gagal!',
-                'data' => ''
-            ]);
+        if (! $token = Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
+
+        return $this->respondWithToken($token);
     }
+
+
+
+
+
+
 }
